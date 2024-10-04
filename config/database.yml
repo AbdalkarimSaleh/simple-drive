@@ -1,0 +1,22 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
+  username: <%= ENV['DATABASE_USER'] || 'postgres' %>
+  password: <%= ENV['DATABASE_PASSWORD'] || '' %>
+  port: 5432
+
+development:
+  <<: *default
+  database: <%= ENV['DATABASE_NAME'] || 'simple_drive_dev' %>
+
+test:
+  <<: *default
+  database: simple_drive_test
+
+production:
+  <<: *default
+  database: simple_drive_production
+  username: simple_drive
+  password: <%= ENV['SIMPLE_DRIVE_DATABASE_PASSWORD'] %>
