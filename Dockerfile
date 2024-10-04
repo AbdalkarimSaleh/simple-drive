@@ -1,5 +1,5 @@
 # Dockerfile
-FROM ruby:3.0.0
+FROM ruby:3.1.0
 
 # Set environment variables
 ENV RAILS_ENV=development
