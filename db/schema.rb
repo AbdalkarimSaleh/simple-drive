@@ -10,8 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 0) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_06_170309) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "blob_storages", force: :cascade do |t|
+    t.string "blob_id", null: false
+    t.binary "data", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["blob_id"], name: "index_blob_storages_on_blob_id", unique: true
+  end
+
+  create_table "blobs", id: :string, force: :cascade do |t|
+    t.integer "size"
+    t.string "storage_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "blob_storages", "blobs", on_delete: :cascade
 end

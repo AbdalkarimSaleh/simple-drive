@@ -3,9 +3,9 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: simple_drive_dev
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -20,17 +20,14 @@ services:
       - "3000:3000"
     depends_on:
       - db
-    environment:
-      DATABASE_HOST: db
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: password
-      DATABASE_NAME: simple_drive_dev
+    env_file:
+      - .env  # Load environment variables from .env file
 
   minio:
     image: minio/minio
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     volumes:
       - minio_data:/data
     ports:
@@ -40,11 +37,11 @@ services:
 
   ftp:
     image: atmoz/sftp
-    volumes:
-      - ftp_data:/home/foo/upload
     ports:
       - "22:22"
-    command: foo:password:1001
+    volumes:
+      - ftp_data:/home/${FTP_USER}/upload
+    command: "${FTP_USER}:${FTP_PASSWORD}:${FTP_UID}" # Dynamic FTP command using environment variables
 
 volumes:
   postgres_data:
